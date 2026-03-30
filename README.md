@@ -289,7 +289,3 @@ Choose your preferred license (MIT recommended for open-source starter projects)
 - LangChain for tool abstractions
 - OpenAI for LLM capabilities
 ```
-
-If you want, I can also generate:
-1. a **short README** version for GitHub top-fold, and  
-2. a **docs/ARCHITECTURE.md** with sequence diagrams.
