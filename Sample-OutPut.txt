@@ -1,0 +1,82 @@
+> **“Build a SaaS project management app with RBAC and analytics.”**
+
+---
+
+## Requirements
+- Multi-tenant SaaS for teams to manage projects/tasks.
+- Roles: `Owner`, `Admin`, `Member`, `Viewer`.
+- Features:
+  - Project/workspace CRUD
+  - Task boards, assignees, due dates, status
+  - Comments and activity timeline
+  - Notifications (email + in-app)
+  - Analytics dashboard (velocity, completion rate, overdue tasks)
+- NFRs:
+  - 99.9% uptime
+  - P95 API latency < 300ms
+  - Audit logging
+  - GDPR-ready data controls
+- Out of scope:
+  - Native mobile app (phase 1)
+  - Third-party marketplace integrations (phase 1)
+
+## Design
+- Architecture: React frontend + FastAPI backend + PostgreSQL + Redis + background worker.
+- Services:
+  - Auth/RBAC service
+  - Project & Task service
+  - Notification service
+  - Analytics pipeline
+- APIs:
+  - `POST /auth/login`
+  - `GET /projects`
+  - `POST /tasks`
+  - `GET /analytics/workspace/{id}`
+- Data model:
+  - `users`, `workspaces`, `memberships`, `projects`, `tasks`, `comments`, `events`.
+- Risks:
+  - Permission leakage → policy middleware + integration tests.
+  - Analytics query cost → pre-aggregated metrics tables.
+
+## Implementation
+- Sprint 1: auth, tenancy, workspace/project CRUD.
+- Sprint 2: tasks, comments, notifications.
+- Sprint 3: analytics + performance hardening.
+- CI/CD:
+  - lint + type-check + tests on PR
+  - container build + staged deploy
+- Starter structure:
+  - `/api`, `/services`, `/repositories`, `/workers`, `/infra`.
+
+## Testing
+- Unit: RBAC checks, task lifecycle rules.
+- Integration: auth ↔ project/task APIs ↔ DB.
+- E2E: user signup → workspace creation → task flow.
+- Performance: 1k concurrent users, dashboard load tests.
+- Gates:
+  - Unit coverage ≥ 80%
+  - No critical test failures
+  - RBAC regression suite mandatory pass.
+
+## Security
+- Threats: broken access control, insecure JWT handling, tenant data leakage.
+- Controls:
+  - Short-lived JWT + refresh tokens
+  - Row-level tenant isolation checks
+  - Secrets via vault/KMS
+  - TLS everywhere + encryption at rest
+- Security testing:
+  - SAST, dependency scan, DAST on staging
+  - Permission boundary tests for every role.
+
+## Final Report (Excerpt)
+- Delivery target: 10–12 weeks MVP.
+- Go-live checklist:
+  - ✅ RBAC penetration tests passed
+  - ✅ Backup/restore tested
+  - ✅ Monitoring + alerting configured
+  - ✅ Runbooks and incident response defined
+- Post-launch:
+  - Add mobile support
+  - Add external integrations
+  - Add predictive analytics for project slippage
